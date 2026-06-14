@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Academic Writing Course</title>
+    <style>
+        :root {
+            --bg-dark: #0a0a14;
+            --card-bg: rgba(20, 20, 40, 0.85);
+            --primary: #6c5ce7;
+            --primary-glow: rgba(108, 92, 231, 0.5);
+            --accent: #a29bfe;
+            --text: #e0e0f0;
+            --text-muted: #a0a0c0;
+            --input-bg: rgba(30, 30, 60, 0.7);
+            --input-border: rgba(108, 92, 231, 0.3);
+            --input-focus-border: rgba(108, 92, 231, 0.8);
+            --error: #ff6b6b;
+            --success: #51cf66;
+            --warning: #ffd43b;
+            --shadow-lg: 0 25px 60px rgba(0, 0, 0, 0.5);
+            --radius: 18px;
+            --radius-sm: 10px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .bg-orb.orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #6c5ce7 0%, transparent 70%);
+            top: -15%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+        .bg-orb.orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #a29bfe 0%, transparent 70%);
+            bottom: -20%;
+            right: -8%;
+            animation-delay: -7s;
+        }
+        .bg-orb.orb-3 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, #4a3fcf 0%, transparent 70%);
+            top: 40%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+        .bg-orb.orb-4 {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, #7c6ff7 0%, transparent 70%);
+            bottom: 10%;
+            left: 15%;
+            animation-delay: -3s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(60px, -80px) scale(1.15); }
+            50% { transform: translate(-30px, 40px) scale(0.9); }
+            75% { transform: translate(-70px, -30px) scale(1.1); }
+        }
+
+        .stars-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.8); }
+        }
+
+        .login-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+            padding: 20px;
+        }
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius);
+            padding: 45px 35px;
+            box-shadow: var(--shadow-lg);
+            animation: cardEntry 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            border-radius: 50%;
+        }
+        @keyframes cardEntry {
+            from { opacity: 0; transform: translateY(40px) scale(0.94); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .login-icon {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 12px 35px var(--primary-glow);
+            animation: pulse 3s infinite ease-in-out;
+        }
+        .login-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: none;
+            stroke: white;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 12px 35px var(--primary-glow); }
+            50% { box-shadow: 0 18px 50px rgba(108, 92, 231, 0.75); }
+        }
+
+        .login-title {
+            text-align: center;
+            color: #ffffff;
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-top: 12px;
+            letter-spacing: -0.3px;
+        }
+        .login-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4px;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            color: #c0c0e0;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 7px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+        .form-group .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .form-group .input-icon {
+            position: absolute;
+            left: 14px;
+            width: 18px;
+            height: 18px;
+            pointer-events: none;
+            color: #8888b0;
+            z-index: 2;
+            transition: color var(--transition);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px 14px 14px 44px;
+            background: var(--input-bg);
+            border: 1.5px solid var(--input-border);
+            border-radius: var(--radius-sm);
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all var(--transition);
+            outline: none;
+            letter-spacing: 0.3px;
+        }
+        .form-group input::placeholder {
+            color: #5a5a80;
+        }
+        .form-group input:focus {
+            border-color: var(--input-focus-border);
+            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.12);
+            background: rgba(35, 35, 65, 0.8);
+        }
+        .form-group:focus-within .input-icon {
+            color: var(--accent);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #8888b0;
+            padding: 6px;
+            z-index: 2;
+            transition: color var(--transition);
+            display: flex;
+            align-items: center;
+        }
+        .toggle-password:hover { color: #c0c0e0; }
+        .toggle-password svg { width: 18px; height: 18px; }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #6c5ce7, #7c6ff7);
+            color: #ffffff;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 650;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+            margin-top: 8px;
+            font-family: inherit;
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.35);
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 35px rgba(108, 92, 231, 0.5);
+            background: linear-gradient(135deg, #7c6ff7, #8b7df8);
+        }
+        .btn-login:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.2);
+        }
+        .btn-login .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2.5px solid transparent;
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-right: 8px;
+        }
+        .btn-login.loading .spinner { display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .alert {
+            padding: 13px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 18px;
+            display: none;
+            animation: fadeIn 0.35s ease;
+            letter-spacing: 0.2px;
+        }
+        .alert.show { display: flex; align-items: center; gap: 9px; }
+        .alert-error { background: rgba(255, 107, 107, 0.12); border: 1px solid rgba(255, 107, 107, 0.35); color: #ff6b6b; }
+        .alert-success { background: rgba(81, 207, 102, 0.12); border: 1px solid rgba(81, 207, 102, 0.35); color: #51cf66; }
+        .alert-info { background: rgba(108, 92, 231, 0.12); border: 1px solid rgba(108, 92, 231, 0.35); color: #a29bfe; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .success-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            animation: fadeIn 0.4s ease;
+        }
+        .success-overlay.show { display: flex; }
+        .success-modal {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            text-align: center;
+            border: 1px solid rgba(81, 207, 102, 0.3);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .success-modal .check-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(81, 207, 102, 0.2);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .success-modal .check-icon svg {
+            width: 35px;
+            height: 35px;
+            stroke: #51cf66;
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: drawCheck 0.6s ease forwards;
+        }
+        @keyframes drawCheck { from { stroke-dasharray: 50; stroke-dashoffset: 50; } to { stroke-dashoffset: 0; } }
+        .success-modal h2 { color: #fff; margin-bottom: 6px; font-size: 1.4rem; }
+        .success-modal p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+        .success-modal .btn-close {
+            padding: 10px 30px;
+            background: rgba(81, 207, 102, 0.25);
+            color: #51cf66;
+            border: 1px solid rgba(81, 207, 102, 0.4);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .success-modal .btn-close:hover { background: rgba(81, 207, 102, 0.4); }
+        .success-modal .redirect-hint {
+            display: block;
+            font-size: 0.75rem;
+            color: #8b8ba0;
+            margin-top: 10px;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #5a5a80;
+            font-size: 0.78rem;
+        }
+        .login-footer span { color: #7c7ca0; }
+
+        @media (max-width: 480px) {
+            .login-card { padding: 30px 22px; border-radius: 14px; }
+            .login-title { font-size: 1.4rem; }
+            .login-icon { width: 50px; height: 50px; }
+            .form-group input { padding: 12px 12px 12px 38px; font-size: 0.88rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="bg-orb orb-4"></div>
+    <div class="stars-container" id="starsContainer"></div>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+                </svg>
+            </div>
+            <h1 class="login-title">WELCOME</h1>
+            <p class="login-subtitle">Sign in to your academic writing site</p>
+
+            <div class="alert" id="alertBox"></div>
+
+            <form id="loginForm" autocomplete="off">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+                        </svg>
+                        <input type="text" id="username" placeholder="Enter your username" required autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            <circle cx="12" cy="16" r="1"/>
+                        </svg>
+                        <input type="password" id="password" placeholder="Enter your password" required autocomplete="off">
+                        <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+                            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-login" id="btnLogin">
+                    <span class="spinner"></span>
+                    <span class="btn-text">Sign In</span>
+                </button>
+            </form>
+        </div>
+        <p class="login-footer">Secure Authentication &bull; <span>Google Sheets Backend</span></p>
+    </div>
+
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-modal">
+            <div class="check-icon">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="5 13 10 18 19 6"/>
+                </svg>
+            </div>
+            <h2>Login Successful!</h2>
+            <p id="successMessage">Welcome back!</p>
+            <button class="btn-close" id="btnCloseSuccess">
+                <span id="btnCloseText">Go to my site</span>
+            </button>
+            <span class="redirect-hint">You'll be redirected to your academic writing page</span>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ⚙️ CONFIGURATION
+        // ============================================
+        const USE_DEMO_MODE = true;
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx9K9_YhGPWLa_jnJxPHrguRhK5_KLfqeorF8gqj3TqGPcM7stuj7t4QCVJRnllpEGP/exec';
+
+        // ============================================
+        // 📋 USER DATA (Demo mode – updated easy‑to‑read URLs)
+        // ============================================
+        const DEMO_USERS = [
+            { name: 'Dedifis',    username: 'dedifis',    password: 'dedi@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-dedifis-login' },
+            { name: 'Serlina',    username: 'serlina',    password: 'serl@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-serlina-login' },
+            { name: 'Imelda',     username: 'imelda',     password: 'imel@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-imelda-login' },
+            { name: 'Jullo',      username: 'jullo',      password: 'jull@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-jullo-login' },
+            { name: 'Michelle',   username: 'michelle',   password: 'mich@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-michelle-login' },
+            { name: 'Rahel',      username: 'rahel',      password: 'rahe@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-rahel-login' },
+            { name: 'Samuel',     username: 'samuel',     password: 'samu@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-samuel-login' },
+            { name: 'Tesalonika', username: 'tesalonika', password: 'tesa@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-tesa-login' },
+            { name: 'Nia',        username: 'nia',        password: 'nia@2026',  url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-nia-login' },
+            { name: 'Winona',     username: 'winona',     password: 'wino@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-winona-login' },
+            { name: 'Jennifer',   username: 'jennifer',   password: 'jenn@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-jennifer-login' },
+            { name: 'Lubi',       username: 'lubi',       password: 'lubi@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-lubi-login' },
+            { name: 'Luki',       username: 'luki',       password: 'luki@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-luki-login' },
+            { name: 'Hesti',      username: 'hesti',      password: 'hest@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-hesti-login' },
+            { name: 'Erika',      username: 'erika',      password: 'erik@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-erika-login' },
+            { name: 'Herlinda',   username: 'herlinda',   password: 'herl@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-herlinda-login' },
+            { name: 'Adi',        username: 'adi',        password: 'adi@2026',  url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-adi-login' },
+            { name: 'Paulin',     username: 'paulin',     password: 'paul@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-paulin-login' },
+            { name: 'Chicha',     username: 'chicha',     password: 'chic@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-chicha-login' },
+            { name: 'Nadine',     username: 'nadine',     password: 'nadi@2026', url: 'https://sites.google.com/jiu.ac/foundationofacademicwriting/FAW-nadine-login' }
+        ];
+
+        // ============================================
+        // DOM Elements
+        // ============================================
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const btnLogin = document.getElementById('btnLogin');
+        const alertBox = document.getElementById('alertBox');
+        const togglePassword = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+        const successOverlay = document.getElementById('successOverlay');
+        const successMessage = document.getElementById('successMessage');
+        const btnCloseSuccess = document.getElementById('btnCloseSuccess');
+        const btnCloseText = document.getElementById('btnCloseText');
+        const starsContainer = document.getElementById('starsContainer');
+
+        let lastSuccessfulResult = null;
+
+        // ============================================
+        // Stars background
+        // ============================================
+        function createStars() {
+            const count = 80;
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const size = Math.random() * 2 + 1;
+                html += `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${delay}s;width:${size}px;height:${size}px;"></div>`;
+            }
+            starsContainer.innerHTML = html;
+        }
+        createStars();
+
+        // ============================================
+        // Alert display
+        // ============================================
+        function showAlert(message, type = 'error') {
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            clearTimeout(alertBox._timeout);
+            alertBox._timeout = setTimeout(() => alertBox.classList.remove('show'), 6000);
+        }
+
+        function hideAlert() {
+            alertBox.classList.remove('show');
+        }
+
+        // ============================================
+        // Toggle password visibility
+        // ============================================
+        togglePassword.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            if (isPassword) {
+                eyeIcon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+            } else {
+                eyeIcon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+            }
+        });
+
+        // ============================================
+        // Authentication functions
+        // ============================================
+        async function authenticateWithGoogleSheets(username, password) {
+            try {
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                if (!response.ok) throw new Error(`Server status: ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                console.error('Auth error:', error);
+                return { success: false, message: 'Unable to connect to authentication server.' };
+            }
+        }
+
+        function authenticateDemo(username, password) {
+            const trimmed = username.trim().toLowerCase();
+            const user = DEMO_USERS.find(u => u.username === trimmed && u.password === password);
+            if (user) {
+                return {
+                    success: true,
+                    name: user.name,
+                    message: `Welcome back, ${user.name}! 🎉`,
+                    url: user.url
+                };
+            }
+            return { success: false, message: 'Invalid username or password. Please try again.' };
+        }
+
+        // ============================================
+        // Handle form submission
+        // ============================================
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAlert();
+
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!username) {
+                showAlert('Please enter your username.', 'error');
+                usernameInput.focus();
+                return;
+            }
+            if (!password) {
+                showAlert('Please enter your password.', 'error');
+                passwordInput.focus();
+                return;
+            }
+
+            btnLogin.classList.add('loading');
+            btnLogin.disabled = true;
+
+            let result;
+            if (USE_DEMO_MODE || GOOGLE_APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 700));
+                result = authenticateDemo(username, password);
+            } else {
+                result = await authenticateWithGoogleSheets(username, password);
+            }
+
+            btnLogin.classList.remove('loading');
+            btnLogin.disabled = false;
+
+            if (result.success) {
+                lastSuccessfulResult = result;
+                successMessage.textContent = result.message;
+                btnCloseText.textContent = result.url ? 'Go to my site' : 'Continue';
+                document.querySelector('.redirect-hint').style.display = result.url ? 'block' : 'none';
+                successOverlay.classList.add('show');
+                loginForm.reset();
+            } else {
+                showAlert(result.message, 'error');
+                const card = document.querySelector('.login-card');
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = 'shake 0.5s ease';
+                setTimeout(() => { card.style.animation = ''; }, 500);
+            }
+        });
+
+        // Add shake animation
+        const shakeStyle = document.createElement('style');
+        shakeStyle.textContent = `@keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }`;
+        document.head.appendChild(shakeStyle);
+
+        // ============================================
+        // Success overlay & redirection
+        // ============================================
+        function redirectIfPossible() {
+            if (lastSuccessfulResult && lastSuccessfulResult.url) {
+                let url = lastSuccessfulResult.url;
+                if (!url.startsWith('http')) url = 'https://' + url;
+                window.location.href = url;
+            }
+        }
+
+        btnCloseSuccess.addEventListener('click', () => {
+            successOverlay.classList.remove('show');
+            redirectIfPossible();
+            if (!lastSuccessfulResult?.url) usernameInput.focus();
+        });
+
+        successOverlay.addEventListener('click', (e) => {
+            if (e.target === successOverlay) {
+                successOverlay.classList.remove('show');
+                redirectIfPossible();
+                if (!lastSuccessfulResult?.url) usernameInput.focus();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && successOverlay.classList.contains('show')) {
+                successOverlay.classList.remove('show');
+                usernameInput.focus();
+            }
+        });
+
+        setTimeout(() => usernameInput.focus(), 600);
+
+        if (USE_DEMO_MODE || GOOGLE_APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+            console.log('🔶 Running in DEMO mode with updated easy‑to‑read URLs.');
+        } else {
+            console.log('🔗 Connected to Google Sheets backend.');
+        }
+        console.log('✅ Ready. Usernames: ' + DEMO_USERS.map(u => u.username).join(', '));
+    </script>
+</body>
+</html>
